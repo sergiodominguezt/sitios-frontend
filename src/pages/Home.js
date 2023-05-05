@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link, useParams } from "react-router-dom";
+import EditSite from "../sites/EditSite";
 
 export default function Home() {
   const [sites, setSites] = useState([]);
+
+  const { id } = useParams();
 
   useEffect(() => {
     loadSites();
@@ -11,6 +15,11 @@ export default function Home() {
   const loadSites = async () => {
     const result = await axios.get("http://localhost:8080/api/v1/sites");
     setSites(result.data);
+  };
+
+  const deleteSite = async (id) => {
+    await axios.delete(`http://localhost:8080/api/v1/sites/${id}`);
+    loadSites();
   };
 
   return (
@@ -40,9 +49,24 @@ export default function Home() {
                 <td>{site.fecha}</td>
                 <td>{site.ciudad}</td>
                 <td>
-                  <button className="btn btn-light mx-2">Visualizar</button>
-                  <button className="btn btn-dark mx-2">Editar</button>
-                  <button className="btn btn-danger mx-2">Eliminar</button>
+                  <Link
+                    to={`/viewsite/${site.id}`}
+                    className="btn btn-dark mx-2"
+                  >
+                    Visualizar
+                  </Link>
+                  <Link
+                    to={`/editsite/${site.id}`}
+                    className="btn btn-dark mx-2"
+                  >
+                    Editar
+                  </Link>
+                  <button
+                    className="btn btn-danger mx-2"
+                    onClick={() => deleteSite(site.id)}
+                  >
+                    Eliminar
+                  </button>
                 </td>
               </tr>
             ))}

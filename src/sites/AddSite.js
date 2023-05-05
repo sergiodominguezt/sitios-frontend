@@ -19,11 +19,31 @@ export default function AddSite() {
     setSitio({ ...sitio, [e.target.name]: e.target.value });
   };
 
+  //validate form
+  const isFormValid = () => {
+    if (
+      nombre.trim() === "" ||
+      codigo.trim() === "" ||
+      modelo.trim() === "" ||
+      fecha.trim() === "" ||
+      ciudad.trim() === ""
+    ) {
+      return false;
+    }
+    return true;
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
+    if (!isFormValid()) {
+      setError(true);
+      return;
+    }
     await axios.post("http://localhost:8080/api/v1/sites", sitio);
     navigate("/");
   };
+
+  const [error, setError] = useState(false);
 
   return (
     <div className="container">
@@ -43,6 +63,8 @@ export default function AddSite() {
                 name="nombre"
                 value={nombre}
                 onChange={(e) => onInputChange(e)}
+                pattern="[A-Za-z]{3,20}"
+                required={true}
               />
             </div>
             <div className="mb-3">
@@ -57,6 +79,7 @@ export default function AddSite() {
                 name="codigo"
                 value={codigo}
                 onChange={(e) => onInputChange(e)}
+                required={true}
               />
             </div>
             <div className="mb-3">
@@ -71,6 +94,7 @@ export default function AddSite() {
                 name="modelo"
                 value={modelo}
                 onChange={(e) => onInputChange(e)}
+                required={true}
               />
             </div>
             <div className="mb-3">
@@ -85,6 +109,7 @@ export default function AddSite() {
                 name="fecha"
                 value={fecha}
                 onChange={(e) => onInputChange(e)}
+                required={true}
               />
             </div>
             <div className="mb-3">
@@ -99,6 +124,7 @@ export default function AddSite() {
                 name="ciudad"
                 value={ciudad}
                 onChange={(e) => onInputChange(e)}
+                required={true}
               />
             </div>
             <div className="d-grid gap-2 col-6 mx-auto">
