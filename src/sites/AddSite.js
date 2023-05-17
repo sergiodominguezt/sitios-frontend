@@ -33,14 +33,18 @@ export default function AddSite() {
     return true;
   };
 
+ 
+
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!isFormValid()) {
       setError(true);
       return;
     }
+    const token = localStorage.getItem('token');
+    console.log(token);
     await axios.post("http://localhost:8080/api/v1/sites", sitio);
-    navigate("/");
+    navigate("/addSite");
   };
 
   const [error, setError] = useState(false);

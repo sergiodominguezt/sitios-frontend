@@ -25,7 +25,7 @@ export default function Navbar() {
           </button>
 
           <Link className="btn btn-outline-light" to={"/addSite"}>
-            Anadir sitio
+            Test
           </Link>
         </div>
       </nav>

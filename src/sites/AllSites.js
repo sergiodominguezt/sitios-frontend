@@ -10,47 +10,81 @@ import { FormControl, FormGroup, FormLabel } from "react-bootstrap";
 
 
 export default function AllSites() {
+  const navigate = useNavigate();
+
+  
+  // console.log(localStorage.getItem('token'));
 
     const [sites, setSites] = useState([]);
 
+
     const { id } = useParams();
   
-    useEffect(() => {
-      loadSites();
-    }, []);
+    // useEffect(() => {
+    //   loadSites();
+    // }, []);
   
-    const loadSites = async () => {
-      const result = await axios.get("http://localhost:8080/api/v1/sites");
-      setSites(result.data);
+    async function loadSites() {
+  
+
+      try {
+        const token = localStorage.getItem('token');
+        console.log(token);
+        const response = await axios.get("http://localhost:8080/api/v1/sites", {
+           headers: { Authorization: `Bearer ${token}` },
+           });
+        setSites(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+     
     };
+
+    async function logout() {
+  
+
+      try {
+        const token = localStorage.getItem('token');
+        console.log(token);
+        const response = await axios.post("http://localhost:8080/api/v1/auth/logout");
+        navigate('/');   
+      } catch (error) {
+        console.error(error);
+      }
+     
+    };
+
+   
 
     
   
     const deleteSite = async (id) => {
       await axios.delete(`http://localhost:8080/api/v1/sites/${id}`);
-      loadSites();
+      // loadSites();
     };
 
-    async function getProtectedData() {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const response = await axios.get("http://localhost:8080/api/v1/sites", {
-           headers: { Authorization: `Bearer ${token}` },
-           });
-           console.log(response);
+   
+    // async function getProtectedData() {
+    //   const token = localStorage.getItem('token');
+    //   if (token) {
+    //     try {
+    //       const response = await axios.get("http://localhost:8080/api/v1/sites", {
+    //        headers: { Authorization: `Bearer ${token}` },
+    //        });
+    //        console.log(response + "HOLAAA");
            
-        } catch (error) {
-          console.error(error);
+    //     } catch (error) {
+    //       console.error(error + "testingngng");
           
-        }
-      }
-    }
+    //     }
+    //   }
+    // }
 
     
 
 
   return (
+    
        <div className="container">
       <div className="py-4">
         <table className="table table-striped table-hover">
@@ -100,6 +134,9 @@ export default function AllSites() {
             ))}
           </tbody>
         </table>
+        <button onClick={ loadSites }>Load Sites</button>
+        <button onClick={ logout }>Logout</button>
+        
       </div>
     </div>
   );

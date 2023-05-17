@@ -72,6 +72,7 @@ if (userRole === 'USER') {
           <form>
             <div className="form-group">
               <label>Correo electrónico</label>
+              //need to add email error message
               <input type="email" className="form-control" id="email" placeholder="Ingresar correo electrónico"
 
                 value={email}
@@ -80,6 +81,7 @@ if (userRole === 'USER') {
                 }}
 
               />
+             
 
 
             </div>
