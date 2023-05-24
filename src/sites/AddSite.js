@@ -34,17 +34,32 @@ export default function AddSite() {
   };
 
  
+ 
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    const confirmed = window.confirm("¿Está seguro de agregar este registro?");
+    if (!confirmed) {
+      return;
+    }
     if (!isFormValid()) {
       setError(true);
       return;
     }
     const token = localStorage.getItem('token');
     console.log(token);
-    await axios.post("http://localhost:8080/api/v1/sites", sitio);
+    await axios.post("http://localhost:8080/api/v1/createSite", sitio,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     navigate("/addSite");
+    setSitio({
+      nombre: "",
+    codigo: "",
+    modelo: "",
+    fecha: "",
+    ciudad: "",
+    });
   };
 
   const [error, setError] = useState(false);

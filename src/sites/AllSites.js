@@ -5,6 +5,8 @@ import EditSite from "../sites/EditSite";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { FormControl, FormGroup, FormLabel } from "react-bootstrap";
+import { CSVLink } from "react-csv";
+import { saveAs } from 'file-saver';
 
 
 
@@ -80,6 +82,14 @@ export default function AllSites() {
     //   }
     // }
 
+    const exportToCSV = () => {
+      const csvContent = sites
+      .map((site) => `${site.nombre}, ${site.codigo}, ${site.modelo}, ${site.fecha}, ${site.ciudad}` )
+      .join("\n");
+      const csvBlob = new Blob ([csvContent], { type: "text/csv;charset=utf-8" });
+      saveAs(csvBlob, "sites.csv");
+    }
+
     
 
 
@@ -136,6 +146,7 @@ export default function AllSites() {
         </table>
         <button onClick={ loadSites }>Load Sites</button>
         <button onClick={ logout }>Logout</button>
+        <button onClick={ exportToCSV }>Export to CSV</button>
         
       </div>
     </div>
